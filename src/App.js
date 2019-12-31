@@ -10,7 +10,7 @@ class App extends Component {
     this.state = {
       login: false,
       speech: null
-    }
+    };
     this.signedInFlow = this.signedInFlow.bind(this);
     this.requestSignIn = this.requestSignIn.bind(this);
     this.requestSignOut = this.requestSignOut.bind(this);
@@ -27,10 +27,10 @@ class App extends Component {
   }
 
   async signedInFlow() {
-    console.log("come in sign in flow")
+    console.log("come in sign in flow");
     this.setState({
       login: true,
-    })
+    });
     const accountId = await this.props.wallet.getAccountId()
     if (window.location.search.includes("account_id")) {
       window.location.replace(window.location.origin + window.location.pathname)
@@ -50,7 +50,7 @@ class App extends Component {
     this.props.wallet.signOut();
     setTimeout(this.signedOutFlow, 500);
     console.log("after sign out", this.props.wallet.isSignedIn())
-  }
+  };
 
 
   signedOutFlow = () => {
@@ -61,14 +61,14 @@ class App extends Component {
       login: false,
       speech: null
     })
-  }
+  };
 
   render() {
     let style = {
       fontSize: "1.5rem",
       color: "#0072CE",
       textShadow: "1px 1px #D1CCBD"
-    }
+    };
     return (
       <div className="App-header">
         <div className="image-wrapper">
