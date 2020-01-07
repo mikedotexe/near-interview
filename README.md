@@ -20,9 +20,9 @@ Each block in the blockchain has a unique height and hash associated with it. We
 
 **Problem**: blocks are created all the time that do not have the `CreateAccount` transaction that populates this chart. Also, a blank chart is very boring.
 
-**Solution**: use hardcoded mock data for the first few bars, illustrating what it looks like when multiple, stacked accounts exist per block. Then, look up four hardcoded block numbers known to have new accounts associated with them. This illustrates the actual call to retrieve the blocks and update the chart live. 
+**Solution**: use hardcoded mock data for the first few bars, illustrating what it looks like when multiple, stacked accounts exist per block. Then, look up four hardcoded block hashes known to have new accounts associated with them. This illustrates the actual call to retrieve the blocks and update the chart live. 
 
-**Note**: since the above-mentioned hardcoded block hashes are on the testnet, we're not guaranteed that they'll persist.
+**Note**: the above-mentioned hardcoded block hashes are not guaranteed to persist.
 
 ### Challenges
 
