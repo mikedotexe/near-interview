@@ -1,4 +1,5 @@
 import React from 'react';
+import Modal, {closeStyle} from 'simple-react-modal';
 import * as d3 from 'd3';
 
 class StackedBarChart extends React.Component {
@@ -6,7 +7,7 @@ class StackedBarChart extends React.Component {
     super(props);
     this.state = {
       blockHeightsDisplayed: ''
-    }
+    };
   }
   
   componentDidMount() {
@@ -29,6 +30,16 @@ class StackedBarChart extends React.Component {
     }
   };
 
+  show(accountId){
+    this.setState({
+      show: true,
+      accountId: accountId
+    });
+  }
+
+  close(){
+    this.setState({show: false})
+  }
   drawChart() {
     const margin = {top: 10, right: 30, bottom: 40, left: 50};
     const width = 460 - margin.left - margin.right;
@@ -129,6 +140,7 @@ class StackedBarChart extends React.Component {
       nearAccountsStackedData.push(nOfMaxAccounts);
     }
 
+    const self = this;
     // Build the stacked bar rectangle svgs
     svg.append("g")
       .selectAll("g")
@@ -158,13 +170,25 @@ class StackedBarChart extends React.Component {
       // provide click listener per account in this block
       .on("click", function (d) {
         const accountId = d.data.accounts[d[1] - 1].id;
-        alert('Account added: ' + accountId);
+        self.show(accountId);
       })
   }
   
   render() {
     const {divId} = this.props;
-      return <div id={divId} />;
+      return (
+        <div>
+          <div id={divId} />
+          <Modal 
+            show={this.state.show}
+            closeOnOuterClick={true}
+            containerStyle={{background: '#efefef'}}
+          >
+            <a style={closeStyle} onClick={this.close.bind(this)}>X</a>
+            <div>Account added: {this.state.accountId}</div>
+          </Modal>
+        </div>
+      );
   }
 }
 
