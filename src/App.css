@@ -6,7 +6,6 @@
   align-items: center;
   justify-content: center;
   font-size: 1rem;
-  color: white;
   text-align: center;
   padding:2%; 
 }
@@ -65,4 +64,31 @@ button:hover {
   cursor: pointer;
   color: white;
   background: #0072CE;
-} 
+}
+
+/* adding my custom css */
+
+h3, p, .attempting-block p {
+  font-family: "Comic Sans MS";
+}
+
+.attempting-block {
+  text-align: left;
+  border: 1px solid lightslategray;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+#attempts-wrapper {
+  display: flex;
+}
+
+#attempts-wrapper #attempts-backward {
+  padding: 1em;
+  flex: 1;
+}
+
+#attempts-wrapper #attempts-latest {
+  padding: 1em;
+  flex: 1;
+}

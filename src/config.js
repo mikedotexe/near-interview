@@ -58,7 +58,6 @@
     let Cookies = require('js-cookie');
     const cookieConfig = typeof Cookies != 'undefined' && Cookies.getJSON('fiddleConfig');
     if (typeof module !== 'undefined' && module.exports) {
-        console.log("module works")
         module.exports = getConfig;
     } else {
         console.log("Cookie works")

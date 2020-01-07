@@ -6,29 +6,21 @@ import * as nearlib from 'nearlib';
 
 // Initializing contract
 async function InitContract() {
-    window.nearConfig = getConfig('development')
-    console.log("nearConfig", window.nearConfig);
-
-    // Initializing connection to the NEAR DevNet.
-    window.near = await nearlib.connect(Object.assign({ deps: { keyStore: new nearlib.keyStores.BrowserLocalStorageKeyStore() } }, window.nearConfig));
-
-    // Needed to access wallet login
-    window.walletAccount = new nearlib.WalletAccount(window.near);
-
-    // Getting the Account ID. If unauthorized yet, it's just empty string.
-    window.accountId = window.walletAccount.getAccountId();
-
-    var acct = await window.near.account(window.accountId);
-    window.contract = await new nearlib.Contract(acct, window.nearConfig.contractName, {
-       viewMethods: ['welcome',],
-      changeMethods: [],
-      sender: window.accountId
-    });
-    console.log("window.contract: ", window.contract);
+  window.nearConfig = getConfig('development');
+  // Initializing connection to the NEAR DevNet.
+  window.near = await nearlib.connect(Object.assign({ deps: { keyStore: new nearlib.keyStores.BrowserLocalStorageKeyStore() } }, window.nearConfig));
+  window.walletAccount = new nearlib.WalletAccount(window.near);
+  window.accountId = window.walletAccount.getAccountId();
+  let acct = await new nearlib.Account(window.near.connection, window.accountId);
+  window.contract = await new nearlib.Contract(acct, window.nearConfig.contractName, {
+    viewMethods: ['welcome',],
+    changeMethods: [],
+    sender: window.accountId
+  });
 }
 
 window.nearInitPromise = InitContract().then(() => {
-    ReactDOM.render(<App contract={window.contract} wallet={window.walletAccount}/>,
+    ReactDOM.render(<App contract={window.contract} wallet={window.walletAccount} provider={window.near.connection.provider}/>,
       document.getElementById('root')
     );
   }).catch(console.error)

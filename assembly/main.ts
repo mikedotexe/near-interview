@@ -1,5 +1,5 @@
 import { logging } from "near-runtime-ts";
-// available class: near, context, storage, logging, base58, base64, 
+// available class: near, context, storage, logging, base58, base64,
 // PersistentMap, PersistentVector, PersistentDeque, PersistentTopN, ContractPromise, math
 import { TextMessage } from "./model";
 
