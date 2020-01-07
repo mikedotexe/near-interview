@@ -6,11 +6,20 @@ import nearlogo from './assets/gray_near_logo.svg';
 import './App.css';
 
 class App extends Component {
+  // maximum blocks to show in the D3 chart
   maxBlocks = 6;
+  // when fetching historical blocks, only this many
   maxAttemptsToShow = 3;
-  maxIterations = 1991;
+  // when fetching historical blocks, go backwards in the chain this many times
+  maxIterations = 7;
+  // when printing out the gap blocks, use ellipsis after this amount
   maxGapBlockToShow = 7;
+  // for demonstration purposes, we load hardcoded values and hashes
+  // these would cause the gap blocks to become unreasonably large
+  // typically there will be 3-6 gap blocks per poll, if it's larger than this number, ignore it 
   demoPurposeMax = 50;
+  // for demo purposes, the hardcoded hashes of known blocks where accounts are created
+  knownExamples = [];
 
   constructor(props) {
     super(props);
@@ -67,13 +76,16 @@ class App extends Component {
     clearTimeout(this.timer);
     clearTimeout(this.timerHistory);
     clearTimeout(this.timerRange);
+    clearTimeout(this.timerExample);
     this.timer = null;
     this.timerHistory = null;
     this.timerRange = null;
+    this.timerExample = null;
   }
 
   componentDidMount() {
-    // loads some actual blocks I know to be account creations, to fill it out
+    // loads some actual block hashes known to have account creations, for illustration
+    this.knownExamples = getAccountCreatedExamples();
     this.fetchKnownExamples();
     // kicks off searching backwards through the blockchain for a given amount
     this.timedFetchHistorical();
@@ -169,28 +181,33 @@ class App extends Component {
     return ret;
   };
   
+  fetchExample = async (hash) => {
+    const block = await this.props.provider.block(hash);    
+    const actionInfo = await this.getActionFromBlock(block);
+    const blockAccount = {};
+    blockAccount[block.header.height] = {
+      blockHeight: block.header.height,
+      blockHash: block.header.hash,
+      account: {
+        action: actionInfo.action,
+        metadata: actionInfo.metadata
+      }
+    };
+    if (actionInfo.action === 'CreateAccount') this.addNewBlockAccount(blockAccount[block.header.height]);
+    this.knownExamples.splice(0, 1);
+  };
+  
   fetchKnownExamples = async () => {
-    const exampleBlocks = getAccountCreatedExamples();
-    for (let i = 0; i < exampleBlocks.length; i++) {
-      const block = await this.props.provider.block(exampleBlocks[i]);
-      const actionInfo = await this.getActionFromBlock(block);
-      const blockAccount = {};
-      blockAccount[block.header.height] = {
-        blockHeight: block.header.height,
-        blockHash: block.header.hash,
-        account: {
-          action: actionInfo.action,
-          metadata: actionInfo.metadata
-        }
-      };
-      if (actionInfo.action === 'CreateAccount') this.addNewBlockAccount(blockAccount[block.header.height]);
+    if (this.knownExamples.length !== 0 && this.timerExample !== null) {
+      await this.fetchExample(this.knownExamples[0]);
+      
+      this.timerExample = setTimeout(this.fetchKnownExamples, 1000);
     }
   };
 
   fetchLatest = async () => {
     // get the most current block hash and corresponding block
-    // TODO: change to const
-    let latestHash = (await this.props.provider.status()).sync_info.latest_block_hash;
+    const latestHash = (await this.props.provider.status()).sync_info.latest_block_hash;
     const latestBlock = await this.props.provider.block(latestHash);
     
     // if we need to populate recentBlocks, we do the first time
@@ -255,7 +272,7 @@ class App extends Component {
   timedFetchLatest = async () => {
     await this.fetchLatest();
     // Fetch the latest block
-    if (this.timer !== null) { //} && this.state.recentBlocks.length < this.maxIterations) {
+    if (this.timer !== null) {
       this.timer = setTimeout(this.timedFetchLatest, 5000);
     }
   };
@@ -380,7 +397,6 @@ class App extends Component {
   
   timedFetchHistorical = async () => {
     await this.fetchHistorical();
-    // console.log("Finished timed fetch historical");
     // Get previous blocks up to the limit maxIterations
     if (this.timerHistory !== null && this.state.currentIterations < this.maxIterations) {
       this.setState(prevState => {
