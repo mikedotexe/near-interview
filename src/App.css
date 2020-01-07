@@ -68,8 +68,8 @@ button:hover {
 
 /* adding my custom css */
 
-h3, p, .attempting-block p {
-  font-family: "Comic Sans MS";
+h3, p, .attempting-block p, svg text {
+  font-family: "Comic Sans MS", serif;
 }
 
 .attempting-block {
