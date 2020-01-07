@@ -184,7 +184,7 @@ class StackedBarChart extends React.Component {
             closeOnOuterClick={true}
             containerStyle={{background: '#efefef'}}
           >
-            <a style={closeStyle} onClick={this.close.bind(this)}>X</a>
+            <a style={closeStyle} onClick={this.close.bind(this)} href={'#'}>&times;</a>
             <div>Account added: {this.state.accountId}</div>
           </Modal>
         </div>
