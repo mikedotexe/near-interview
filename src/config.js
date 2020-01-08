@@ -1,5 +1,5 @@
 (function() {
-    const CONTRACT_NAME = 'mikedotexe';
+    const CONTRACT_NAME = 'contractId'; /* fill this in, please */
     const DEFAULT_ENV = 'development';
 
     function getConfig(env) {
