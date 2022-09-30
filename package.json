@@ -5,7 +5,7 @@
     "dependencies": {
         "assemblyscript-json": "github:nearprotocol/assemblyscript-json",
         "bignum": "github:MaxGraey/bignum.wasm",
-        "d3": "^5.15.0",
+        "d3": "^7.6.1",
         "gh-pages": "^2.1.1",
         "gulp": "^4.0.2",
         "js-cookie": "^2.2.1",
