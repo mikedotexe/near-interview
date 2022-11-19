@@ -14,7 +14,7 @@
         "nearlib": "^0.19.1",
         "react": "^16.11.0",
         "react-dom": "^16.11.0",
-        "react-scripts": "3.3.0",
+        "react-scripts": "5.0.1",
         "simple-react-modal": "^0.5.1"
     },
     "scripts": {
